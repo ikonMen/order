@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ch" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <title>甬源五金店</title>
+    <link
+            rel="stylesheet"
+            href="../static/lib/bootstrap-3.4.1-dist/css/bootstrap.css"
+    />
+  </head>
+  <link rel="stylesheet" href="https://at.alicdn.com/t/c/font_4495612_n4g6y037kpq.css">
+  <script src="../static/lib/jquery.min.js"></script>
+  <script src="../static/lib/bootstrap-3.4.1-dist/js/bootstrap.js"></script>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    .top{
+      width:100%;
+      height: 10%;
+      box-sizing: border-box;
+      border: 3px red solid;
+    }
+    .content{
+      width: 100%;
+      height: 90%;
+      display: flex;
+      justify-content: flex-start;
+    }
+    .navigation {
+      width: 15%;
+      height: 100%;
+      box-sizing: border-box;
+      border: 3px rebeccapurple solid;
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      justify-content: left;
+    }
+    .detail{
+      width: 85%;
+      height: 100%;
+      box-sizing: border-box;
+    }
+    .navigation .item{
+      background-color: blanchedalmond;
+      margin-top: 5px ;
+      box-sizing: border-box;
+      padding: 5px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 50px;
+    }
+    .navigation .item a{
+      display: flex;
+      width: 100%;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+    }
+    .navigation .item:hover{
+      border: 3px blue solid;
+    }
+
+    .page{
+      width: 100%;
+      height: 100%;
+    }
+    a{
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .iconfont {
+      font-size: 26px;
+      color: blue;
+    }
+
+
+  </style>
+  <body>
+    <div class="top">
+      欢迎光临
+    </div>
+    <div class="content">
+      <div class="navigation">
+        <div class="item">
+            <a href='page1.html'  target="dynamicIframe">商品管理</a>
+        </div>
+        <div class="item">
+          <div class="button">
+            进货单
+          </div>
+        </div>
+        <div class="item">
+            出货单
+        </div>
+        <div class="item">
+            退货单
+        </div>
+      </div>
+      <div class="detail">
+        <iframe class="page" id="dynamicIframe" name="dynamicIframe">
+
+        </iframe>
+      </div>
+    </div>
+
+  </body>
+</html>
