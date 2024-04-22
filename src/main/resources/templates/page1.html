@@ -54,6 +54,37 @@
         background-color: #218838; /* 鼠标悬停时的背景颜色 */
     }
 
+    /* 表格样式 */
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        border: 1px solid #ddd;
+    }
+
+    /* 表头样式 */
+    th {
+        background-color: #4CAF50;
+        color: white;
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    /* 偶数行样式 */
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    /* 鼠标悬停行样式 */
+    tr:hover {
+        background-color: #ddd;
+    }
+
+    /* 单元格样式 */
+    td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
     .form-control {
        max-width: 100%;
         box-sizing: border-box;
@@ -98,6 +129,38 @@
             </div>
         </div>
 
+
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <th>
+                    <td>商品名称</td>
+                    <td>商品类别</td>
+                    <td>进货价</td>
+                    <td>售价</td>
+                </th>
+                <tr>
+                    <td>1</td>
+                    <td>张三</td>
+                    <td>25</td>
+                    <td>北京</td>
+                    <td>北京</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>张三</td>
+                    <td>25</td>
+                    <td>北京</td>
+                    <td>北京</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>张三</td>
+                    <td>25</td>
+                    <td>北京</td>
+                    <td>北京</td>
+                </tr>
+            </table>
+        </div>
     </div>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document" >
