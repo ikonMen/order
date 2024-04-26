@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>甬源五金店</title>
-    <link rel="stylesheet" href="../static/lib/bootstrap-3.4.1-dist/css/bootstrap.css"/>
+    <link rel="stylesheet" th:href="@{/lib/bootstrap-3.4.1-dist/css/bootstrap.css}" href="../static/lib/bootstrap-3.4.1-dist/css/bootstrap.css"/>
 </head>
 
 <style>
@@ -54,35 +54,12 @@
         background-color: #218838; /* 鼠标悬停时的背景颜色 */
     }
 
-    /* 表格样式 */
-    table {
-        border-collapse: collapse;
-        width: 100%;
-        border: 1px solid #ddd;
-    }
-
-    /* 表头样式 */
-    th {
-        background-color: #4CAF50;
-        color: white;
-        border: 1px solid #ddd;
-        padding: 8px;
-    }
-
-    /* 偶数行样式 */
-    tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-
-    /* 鼠标悬停行样式 */
-    tr:hover {
-        background-color: #ddd;
-    }
-
-    /* 单元格样式 */
-    td {
-        border: 1px solid #ddd;
-        padding: 8px;
+    .table-container{
+        height: 600px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
     .form-control {
@@ -96,23 +73,88 @@
         margin-top: 5px;
     }
 
+    .pagination {
+        width: 100%;
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .pagination .page-size {
+        margin-bottom: 10px;
+    }
+
+    .pagination .page-size label {
+        margin-right: 10px;
+    }
+
+    .pagination .page-size select {
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+    }
+
+    .pagination ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .pagination ul li {
+        display: inline;
+        display: inline-block;
+        width: 5%;
+        padding: 8px 16px;
+        margin-right: 5px;
+        text-decoration: none;
+        color: #000;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        transition: background-color 0.3s ease;
+    }
+
+    .pagination ul li a.active {
+        background-color: #007bff;
+        color: #fff;
+    }
+
+    .checkbox {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #333;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 8px;
+    }
+
+    .error-message {
+        display: none;
+        color: red; /* 错误文本的颜色 */
+        font-size: 14px; /* 字体大小 */
+        /* 其他样式设置 */
+    }
+
+    .error-message-container {
+       height: 14px;
+    }
+
+
 
 
 </style>
 <body>
     <div class="container">
         <div class="search-container row">
-            <form action="/search" class="form-inline search-form col-lg-4 row">
-                <div class="form-group col-lg-6 row">
-                    <input type="text" class="form-control" name="commodity" placeholder="请输入商品名称">
+            <form   class="form-inline search-form col-lg-4 row">
+                <div class="form-group col-lg-6 ">
+                    <input type="text" id="commodityNameForQuery" class="form-control"   placeholder="请输入商品名称">
                 </div>
                 <div class="form-group col-lg-6">
-                    <select name="commoditySort" class="form-control">
+                    <select id="commoditySortForQuery" class="form-control">
                         <option disabled selected style="display: none;">请选择商品类别</option>
-                        <option value="action">Action</option>
-                        <option value="another_action">Another action</option>
-                        <option value="something_else">Something else here</option>
-                        <option value="separated_link">Separated link</option>
+                        <option value="1">锁头</option>
+                        <option value="2">灯泡</option>
+                        <option value="3">水龙头</option>
+                        <option value="4">水管</option>
                     </select>
                 </div>
             </form>
@@ -130,58 +172,67 @@
         </div>
 
 
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <th>
-                    <td>商品名称</td>
-                    <td>商品类别</td>
-                    <td>进货价</td>
-                    <td>售价</td>
-                </th>
-                <tr>
-                    <td>1</td>
-                    <td>张三</td>
-                    <td>25</td>
-                    <td>北京</td>
-                    <td>北京</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>张三</td>
-                    <td>25</td>
-                    <td>北京</td>
-                    <td>北京</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>张三</td>
-                    <td>25</td>
-                    <td>北京</td>
-                    <td>北京</td>
-                </tr>
-            </table>
+        <div class="table-responsive table-container "  th:fragment="commodityTable">
+                <table class="table table-hover">
+                    <th>
+                        <td>序号</td>
+                        <td>商品名称</td>
+                        <td>商品类别</td>
+                        <td>进货价</td>
+                        <td>售价</td>
+                    </th>
+                    <tbody>
+                    <tr th:each="goods,goodsStat : ${commodityList}" >
+                        <td><input type="checkbox"  class="checkbox checkboxInList"></td>
+                        <td th:text="${goodsStat.index+1}"></td>
+                        <td th:text="${goods.name}"></td>
+                        <td th:text="${goods.sort}"></td>
+                        <td th:text="${goods.cost}"></td>
+                        <td th:text="${goods.price}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+        <div class="pagination row">
+                <ul class="col-lg-12 page-navigation" >
+                    <li class="dynamicBtn" data-value="left">&laquo;</li>
+                    <li class="page-num">1</li>
+                    <li class="page-num">2</li>
+                    <li class="page-num">3</li>
+                    <li class="page-num">4</li>
+                    <li class="page-num">5</li>
+                    <li class="dynamicBtn" data-value="right">&raquo;</li>
+                </ul>
         </div>
+
+
+
+
     </div>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document" >
             <div class="modal-content">
-                <form class="form-horizontal">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         <h4 class="modal-title">新增商品</h4>
                     </div>
                     <div class="modal-body">
-                        <form class="form-horizontal">
+                        <form class="form-horizontal" id="saveOrUpdateForm">
                             <div class="form-group">
                                 <label  class="col-sm-2 control-label">商品名称</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="goodsName" placeholder="请输入商品名称">
+                                    <input type="text" class="form-control valid" id="commodityNameForAdd" placeholder="请输入商品名称">
+                                    <div class="error-message-container">
+                                        <span class="error-message" >商品名称不可为空</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label  class="col-sm-2 control-label">商品类别</label>
                                 <div class="col-sm-10">
-                                    <select class="form-control" id="goodsSort">
+                                    <select class="form-control" id="commoditySortForAdd">
                                         <option>1</option>
                                         <option>2</option>
                                         <option>3</option>
@@ -191,46 +242,136 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label  class="col-sm-2 control-label">存放区域</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="goodsRestriction" placeholder="请输入商品存放区域">
-                                </div>
-                            </div>
-                            <div class="form-group">
                                 <label  class="col-sm-2 control-label">进货价</label>
                                 <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="goodsImportPrice" placeholder="请输入商品进货价">
+                                    <input type="text" class="form-control number-type-valid valid" id="commodityPriceForAdd" placeholder="请输入商品进货价">
+                                    <div class="error-message-container">
+                                        <span class="error-message" >请输入正确的数字格式</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label  class="col-sm-2 control-label">售价</label>
                                 <div class="col-sm-10">
-                                    <input type="number" class="form-control" id="goodsExportPrice" placeholder="请输入商品售价">
+                                    <input type="text" class="form-control number-type-valid valid" id="commodityCostForAdd" placeholder="请输入商品售价">
+                                    <div class="error-message-container">
+                                        <span class="error-message" >请输入正确的数字格式</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
-                                    <button type="submit" class="btn btn-default">新增</button>
+                                    <button type="button" class="btn btn-default add-commodity-submit-btn">新增</button>
                                 </div>
                             </div>
                         </form>
                     </div>
-                </form>
             </div>
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="../static/lib/bootstrap-3.4.1-dist/js/bootstrap.js"></script>
-    <script>
+    <script th:src="@{/lib/bootstrap-3.4.1-dist/js/bootstrap.js}"></script>
+    <script >
+        let pageNum=1;
+        $(".page-navigation").on("click",".page-num",function(){
+            pageNum=parseInt($(this).text());
+            query()
+        })
+
+        let query=function(){
+            $.ajax({
+                url:"search",
+                type:"post",
+                data:{"commodityName":$("#commodityNameForQuery").val(),
+                    "pageNum":pageNum,
+                    "commoditySort":$("#commoditySortForQuery").val()},
+                contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                success: function(data){
+                    $(".table-container").html(data)
+                }
+            })}
+
+        $(".page-navigation").on("click",".dynamicBtn",function(){
+            let direction=$(this).data("value")
+            let pageNums=[]
+            $(".page-num").each(function() {
+                pageNums.push(parseInt($(this).text()));
+            })
+            if (direction == "left" && pageNums.includes(1)){
+                return
+            }else if (direction == "right") {
+                pageNums = pageNums.map(n => n + 1);
+            }else {
+                pageNums = pageNums.map(n => n - 1);
+            }
+            let htmlContent=`<li class="dynamicBtn" data-value="left">&laquo;</li>`
+            pageNums.forEach(num=>htmlContent+=`<li class="page-num">${num}</li>`)
+            htmlContent+=`<li class="dynamicBtn" data-value="right">&raquo;</li>`
+            $(".page-navigation").html(htmlContent)
+        })
+
+
+        $(".search-button").click(()=>{
+            query();
+        })
+
         $(".add-button").click(function openDialog(){
+            clearForm("saveOrUpdateForm");
             $('#myModal').modal('show');
         })
 
 
-        $(".dropdown-menu li a").click(function(){
-            let selectedValue = $(this).text();
-            $(this).closest('.dropdown').find('.dropdown-toggle').html(selectedValue + ' <span class="caret"></span>');
-        });
+        $(".add-commodity-submit-btn").click(function(){
+            let existErr=validForm("saveOrUpdateForm")
+            if (!existErr){
+                $.ajax({
+                    url:"add",
+                    type:"post",
+                    data:{
+                        "name":$("#commodityNameForAdd").val(),
+                        "sort":$("#commoditySortForAdd").val(),
+                        "price":$("#commodityPriceForAdd").val(),
+                        "cost":$("#commodityCostForAdd").val()
+                    },
+                    contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                    success: function(){
+                        alert("添加成功");
+                        $('#myModal').modal('hide');
+                        clearForm("saveOrUpdateForm");
+                        query();
+                    }
+                })
+            }
+        })
+
+
+        function clearForm(formName) {
+            // 获取表单元素
+            let form = $("#"+formName);
+
+            form.find("input, textarea, select").each(function() {
+                // 清除输入框、文本域和选择框的值
+                $(this).val("");
+            });
+        }
+
+        function validForm(formName){
+            let error=false;
+            let form = $("#"+formName);
+            form.find("input.valid").each(function(){
+                let span=$(this).next(".error-message-container").children().first();
+                if ($(this).val().trim() === "" ){
+                    span.show();
+                    error=true;
+                }else if($(this).hasClass("number-type-valid") && !$.isNumeric($(this).val())){
+                    span.show();
+                }else {
+                    span.hide();
+                }
+            })
+            return error;
+        }
+
 
     </script>
 </body>
