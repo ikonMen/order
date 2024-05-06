@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ch" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <title>甬源五金店</title>
     <link rel="stylesheet" th:href="@{/lib/bootstrap-3.4.1-dist/css/bootstrap.css}" href="../static/lib/bootstrap-3.4.1-dist/css/bootstrap.css"/>
 </head>
@@ -62,6 +62,33 @@
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
+    .table{
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .table tbody {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+    }
+    .table tbody .content-tr{
+        display: flex;
+        flex: 1;
+    }
+    .table tbody .head-tr{
+        background-color: #f0f0f0; /* 表头背景色 */
+        font-weight: bold; /* 表头文字加粗 */
+        display: flex;
+    }
+    .table tbody tr td{
+        flex: 2;
+    }
+    .table tbody tr .checkbox-td{
+        flex: 1;
+    }
+
+
     .form-control {
        max-width: 100%;
         box-sizing: border-box;
@@ -73,48 +100,45 @@
         margin-top: 5px;
     }
 
+
     .pagination {
-        width: 100%;
-        text-align: center;
-        margin-top: 20px;
+        display: flex;
+        justify-content: center; /* 水平居中 */
+        align-items: center; /* 垂直居中 */
+        margin-top: 20px; /* 上方留白 */
     }
 
-    .pagination .page-size {
-        margin-bottom: 10px;
-    }
-
-    .pagination .page-size label {
-        margin-right: 10px;
-    }
-
-    .pagination .page-size select {
-        padding: 5px;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-    }
-
-    .pagination ul {
-        list-style-type: none;
+    .page-navigation {
+        list-style: none;
         padding: 0;
-        margin: 0;
+        display: flex;
+        width: 40%;
     }
 
-    .pagination ul li {
-        display: inline;
-        display: inline-block;
-        width: 5%;
-        padding: 8px 16px;
-        margin-right: 5px;
-        text-decoration: none;
-        color: #000;
-        border: 1px solid #ccc;
-        border-radius: 3px;
-        transition: background-color 0.3s ease;
+    .page-navigation li {
+        display: flex;
+        justify-content: center;
+        align-items: center; /* 垂直居中 */
+        width: 10%;
+        margin: 0 5px; /* 调整页码之间的间距 */
+        cursor: pointer;
+        padding: 5px 10px; /* 增加页码的内边距 */
+        border: 1px solid #ccc; /* 添加边框 */
+        border-radius: 3px; /* 圆角边框 */
     }
 
-    .pagination ul li a.active {
-        background-color: #007bff;
-        color: #fff;
+    .dynamicBtn {
+        cursor: pointer;
+        padding: 5px 10px; /* 增加按钮的内边距 */
+        border: 1px solid #ccc; /* 添加边框 */
+        border-radius: 3px; /* 圆角边框 */
+    }
+
+    .active {
+        background-color: #007bff; /* 活动状态的背景颜色 */
+        color: #fff; /* 活动状态的文字颜色 */
+        border-color: #007bff; /* 活动状态的边框颜色 */
+        font-weight: bold; /* 活动状态的文字加粗 */
     }
 
     .checkbox {
@@ -137,7 +161,61 @@
        height: 14px;
     }
 
+    .select-container{
+        position: relative;
+    }
 
+    .select-container button {
+        position: absolute;
+        top: 0;
+        right: 7px;
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+        font-size: 16px; /* 设置按钮的字体大小 */
+    }
+
+    .select-container button::after {
+        content: "+"; /* 使用伪元素添加按钮的内容 */
+        font-weight: bold; /* 设置按钮内容的粗细 */
+    }
+
+    .popup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        z-index: 10000;
+    }
+
+    .popup h3 {
+        margin-top: 0;
+    }
+
+    .popup input[type="text"] {
+        width: calc(100% - 40px); /* 考虑按钮的宽度 */
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .popup button {
+        width: 100%;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+
+    .popup .existing-tags {
+        margin-bottom: 10px;
+    }
 
 
 </style>
@@ -148,19 +226,17 @@
                 <div class="form-group col-lg-6 ">
                     <input type="text" id="commodityNameForQuery" class="form-control"   placeholder="请输入商品名称">
                 </div>
-                <div class="form-group col-lg-6">
-                    <select id="commoditySortForQuery" class="form-control">
+                <div class="form-group col-lg-6 select-container">
+                    <select id="commoditySortForQuery" class="form-control" th:each=" commoditySort : ${commoditySortList}">
                         <option disabled selected style="display: none;">请选择商品类别</option>
-                        <option value="1">锁头</option>
-                        <option value="2">灯泡</option>
-                        <option value="3">水龙头</option>
-                        <option value="4">水管</option>
+                        <option th:text="${commoditySort.name}" th:value="${commoditySort.name}"></option>
                     </select>
+                    <button class="add-sort-button">11</button>
                 </div>
             </form>
             <div class="btn-group col-lg-6 row">
                 <div class="form-group col-lg-4 ">
-                    <button class="search-button btn-good" type="submit"><i class="fa fa-search"></i>搜索</button>
+                    <button class=" btn-good search-button" type="submit"><i class="fa fa-search"></i>搜索</button>
                 </div>
                 <div class="col-lg-4">
                     <button class=" btn-good add-button" >新增商品</button>
@@ -172,18 +248,19 @@
         </div>
 
 
-        <div class="table-responsive table-container "  th:fragment="commodityTable">
-                <table class="table table-hover">
-                    <th>
+        <div class="table-responsive table-container " >
+                <table class="table table-hover"  th:fragment="commodityTable">
+                    <tbody>
+                    <tr class="head-tr">
+                        <td class="checkbox-td"><input type="checkbox"  class="checkbox head-checkbox"></td>
                         <td>序号</td>
                         <td>商品名称</td>
                         <td>商品类别</td>
                         <td>进货价</td>
                         <td>售价</td>
-                    </th>
-                    <tbody>
-                    <tr th:each="goods,goodsStat : ${commodityList}" >
-                        <td><input type="checkbox"  class="checkbox checkboxInList"></td>
+                    </tr>
+                    <tr class="content-tr" th:each="goods,goodsStat : ${commodityList}" >
+                        <td class="checkbox-td"><input type="checkbox" th:value="${goods.id}"  class="checkbox content-checkbox"></td>
                         <td th:text="${goodsStat.index+1}"></td>
                         <td th:text="${goods.name}"></td>
                         <td th:text="${goods.sort}"></td>
@@ -195,8 +272,8 @@
             </div>
 
 
-        <div class="pagination row">
-                <ul class="col-lg-12 page-navigation" >
+        <div class="pagination ">
+                <ul class="page-navigation" >
                     <li class="dynamicBtn" data-value="left">&laquo;</li>
                     <li class="page-num">1</li>
                     <li class="page-num">2</li>
@@ -206,9 +283,6 @@
                     <li class="dynamicBtn" data-value="right">&raquo;</li>
                 </ul>
         </div>
-
-
-
 
     </div>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -269,27 +343,38 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="sortModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document" >
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">新增商品</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="popup">
+                        <h3>已有标签：</h3>
+                        <div class="existing-tags" id="existingTags"></div>
+                        <input type="text" id="tagInput" placeholder="请输入标签名称">
+                        <button id="addTag">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script th:src="@{/lib/bootstrap-3.4.1-dist/js/bootstrap.js}"></script>
-    <script >
-        let pageNum=1;
-        $(".page-navigation").on("click",".page-num",function(){
-            pageNum=parseInt($(this).text());
-            query()
-        })
+    <script>
+        let deleteIds=[]
 
-        let query=function(){
-            $.ajax({
-                url:"search",
-                type:"post",
-                data:{"commodityName":$("#commodityNameForQuery").val(),
-                    "pageNum":pageNum,
-                    "commoditySort":$("#commoditySortForQuery").val()},
-                contentType:"application/x-www-form-urlencoded;charset=UTF-8",
-                success: function(data){
-                    $(".table-container").html(data)
-                }
-            })}
+        $(".page-navigation").on("click",".page-num",function(){
+            $(".active").removeClass("active")
+            $(this).addClass("active")
+            let pageNum=parseInt($(this).text());
+            query(pageNum)
+        })
 
         $(".page-navigation").on("click",".dynamicBtn",function(){
             let direction=$(this).data("value")
@@ -312,38 +397,117 @@
 
 
         $(".search-button").click(()=>{
-            query();
+            let initPageNum=1
+            query(initPageNum);
         })
 
+
         $(".add-button").click(function openDialog(){
+            console.log("enter1")
             clearForm("saveOrUpdateForm");
             $('#myModal').modal('show');
         })
 
-
-        $(".add-commodity-submit-btn").click(function(){
+        $(".add-commodity-submit-btn").click(function (){
             let existErr=validForm("saveOrUpdateForm")
             if (!existErr){
-                $.ajax({
-                    url:"add",
-                    type:"post",
-                    data:{
-                        "name":$("#commodityNameForAdd").val(),
-                        "sort":$("#commoditySortForAdd").val(),
-                        "price":$("#commodityPriceForAdd").val(),
-                        "cost":$("#commodityCostForAdd").val()
-                    },
-                    contentType:"application/x-www-form-urlencoded;charset=UTF-8",
-                    success: function(){
-                        alert("添加成功");
-                        $('#myModal').modal('hide');
-                        clearForm("saveOrUpdateForm");
-                        query();
-                    }
-                })
+               addCommodity();
             }
         })
 
+        $(".add-sort-button").click(function openDialog() {
+            console.log("enter2")
+            $('#sortModal').modal('show');
+        })
+
+        $(".delete-button").click(function () {
+            if (deleteIds.length != 0){
+                console.log(deleteIds);
+                deleteCommodityByIds(deleteIds);
+                deleteIds.length = 0;
+                clearCheckBox();
+            }else {
+                alert("请选中删除项")
+            }
+
+        })
+
+        $(".table-container").on("change", ".head-checkbox",function() {
+            // 获取全选复选框的选中状态
+            let isChecked = $(this).prop("checked");
+            // 更新所有内容行的复选框状态
+            $(".table-container").find(".content-checkbox").each(function(index, box) {
+                $(box).prop("checked", isChecked).trigger("change");
+            });
+        });
+
+        $(".table-container").on("change",".content-checkbox", function() {
+            let goodsId = $(this).val(); // 获取被勾选复选框的值，即商品的 ID
+            if ($(this).prop("checked")) {
+               deleteIds.push(goodsId);
+            }else {
+                let index = deleteIds.indexOf(goodsId);
+                if (index !== -1) {
+                    deleteIds.splice(index, 1);
+                }
+            }
+        });
+
+        function deleteCommodityByIds(ids) {
+            $.ajax({
+                url:"remove",
+                type:"post",
+                data:JSON.stringify({
+                    "ids": ids
+                }),
+                contentType:"application/json;charset=UTF-8",
+                success: function(){
+                    alert("删除成功");
+                    query(1);
+                }
+            })
+        }
+
+        function addCommodity() {
+            $.ajax({
+                url:"add",
+                type:"post",
+                data:{
+                    "name":$("#commodityNameForAdd").val(),
+                    "sort":$("#commoditySortForAdd").val(),
+                    "price":$("#commodityPriceForAdd").val(),
+                    "cost":$("#commodityCostForAdd").val()
+                },
+                contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+                success: function(){
+                    alert("添加成功");
+                    $('#myModal').modal('hide');
+                    query(1);
+                }
+            })
+        }
+
+        function query(pageNum){
+            $.ajax({
+                url:"search",
+                type:"post",
+                data:{"commodityName":$("#commodityNameForQuery").val(),
+                    "pageNum":pageNum,
+                    "commoditySort":$("#commoditySortForQuery").val()},
+                contentType:"application/x-www-form-urlencoded;charset=UTF-8",
+                success: function(data){
+                    $(".table-container").html(data)
+                }
+            })}
+
+        function clearCheckBox() {
+            $(".content-checkbox").each(function(index, box) {
+                $(box).prop("checked", false);
+            });
+            $(".head-checkbox").each(function(index, box) {
+                $(box).prop("checked", false);
+            });
+        }
 
         function clearForm(formName) {
             // 获取表单元素
@@ -356,21 +520,22 @@
         }
 
         function validForm(formName){
-            let error=false;
+            let error=true;
             let form = $("#"+formName);
             form.find("input.valid").each(function(){
                 let span=$(this).next(".error-message-container").children().first();
                 if ($(this).val().trim() === "" ){
                     span.show();
-                    error=true;
                 }else if($(this).hasClass("number-type-valid") && !$.isNumeric($(this).val())){
                     span.show();
                 }else {
                     span.hide();
+                    error=false;
                 }
             })
             return error;
         }
+
 
 
     </script>
