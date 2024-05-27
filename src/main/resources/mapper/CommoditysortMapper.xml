@@ -3,7 +3,7 @@
 <mapper namespace="com.yongyuan.order.mapper.CommoditysortMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.yongyuan.order.entity.Commoditysort">
+    <resultMap id="BaseResultMap" type="com.yongyuan.order.entity.CommoditySort">
         <id column="id" property="id" />
         <result column="name" property="name" />
     </resultMap>

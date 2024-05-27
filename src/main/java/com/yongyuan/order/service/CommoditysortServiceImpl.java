@@ -1,6 +1,6 @@
-package com.yongyuan.order.app.service.impl;
+package com.yongyuan.order.service;
 
-import com.yongyuan.order.entity.Commoditysort;
+import com.yongyuan.order.entity.CommoditySort;
 import com.yongyuan.order.mapper.CommoditysortMapper;
 import com.yongyuan.order.service.ICommoditysortService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,6 +15,6 @@ import org.springframework.stereotype.Service;
  * @since 2024-05-06
  */
 @Service
-public class CommoditysortServiceImpl extends ServiceImpl<CommoditysortMapper, Commoditysort> implements ICommoditysortService {
+public class CommoditysortServiceImpl extends ServiceImpl<CommoditysortMapper, CommoditySort> implements ICommoditysortService {
 
 }

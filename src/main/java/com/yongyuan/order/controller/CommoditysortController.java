@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2024-05-06
  */
 @RestController
-@RequestMapping("//commoditysort")
+@RequestMapping("/commoditySort")
 public class CommoditysortController {
 
 }

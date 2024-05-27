@@ -1,6 +1,6 @@
 package com.yongyuan.order.mapper;
 
-import com.yongyuan.order.entity.Commoditysort;
+import com.yongyuan.order.entity.CommoditySort;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,6 +13,6 @@ import org.apache.ibatis.annotations.Mapper;
  * @since 2024-05-06
  */
 @Mapper
-public interface CommoditysortMapper extends BaseMapper<Commoditysort> {
+public interface CommoditysortMapper extends BaseMapper<CommoditySort> {
 
 }

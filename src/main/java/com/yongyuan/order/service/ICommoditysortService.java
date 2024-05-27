@@ -1,6 +1,6 @@
 package com.yongyuan.order.service;
 
-import com.yongyuan.order.entity.Commoditysort;
+import com.yongyuan.order.entity.CommoditySort;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -11,6 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author fengsheming
  * @since 2024-05-06
  */
-public interface ICommoditysortService extends IService<Commoditysort> {
+public interface ICommoditysortService extends IService<CommoditySort> {
 
 }
